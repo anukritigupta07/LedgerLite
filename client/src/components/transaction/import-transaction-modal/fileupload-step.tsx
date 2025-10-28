@@ -1,0 +1,147 @@
+import { toast } from "sonner";
+import { usePapaParse } from "react-papaparse";
+import { FileUp } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Progress } from "../../ui/progress";
+import { useRef } from "react";
+import {
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../../ui/dialog";
+import { MAX_FILE_SIZE, MAX_IMPORT_LIMIT } from "../../../constant";
+import { useProgressLoader } from "../../../hooks/use-progress-loader";
+
+interface CsvRow {
+  [key: string]: string | undefined;
+}
+
+type FileUploadStepProps = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onFileUpload: (file: File, columns: any[], data: any[]) => void;
+};
+
+const FileUploadStep = ({ onFileUpload }: FileUploadStepProps) => {
+  const { readString } = usePapaParse();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    progress,
+    isLoading,
+    startProgress,
+    updateProgress,
+    doneProgress,
+    resetProgress,
+  } = useProgressLoader({ initialProgress: 10, completionDelay: 500 });
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+      toast.error(`File size exceeds ${MAX_FILE_SIZE / 1024 / 1024} MB`);
+      return;
+    }
+
+    resetProgress();
+    startProgress();
+
+    try {
+      const fileText = await file.text();
+      readString<CsvRow>(fileText, {
+        header: true,
+        skipEmptyLines: true,
+        fastMode: true,
+        complete: (results) => {
+          if (results.data.length > MAX_IMPORT_LIMIT) {
+            toast.error(
+              `You can only import up to ${MAX_IMPORT_LIMIT} transactions.`
+            );
+            resetProgress();
+            return;
+          }
+
+          updateProgress(40);
+
+          const columns =
+            results.meta.fields?.map((name: string) => ({
+              id: name,
+              name,
+              sampleData:
+                results.data[0]?.[name]?.slice(0, MAX_IMPORT_LIMIT) || "",
+            })) || [];
+
+          doneProgress();
+
+          setTimeout(() => {
+            onFileUpload(file, columns, results.data);
+          }, 500);
+        },
+        error: (error) => {
+          console.error("Error parsing CSV:", error);
+          resetProgress();
+        },
+      });
+    } catch (error) {
+      console.error("Error reading file:", error);
+      resetProgress();
+    }
+  };
+
+  return (
+    <div className="space-y-6 bg-[#FFFFFF] rounded-2xl shadow-md border border-[#E5E7EB] p-6">
+      <DialogHeader>
+        <DialogTitle className="text-[#002B4C] text-xl font-semibold">
+          Upload CSV File
+        </DialogTitle>
+        <DialogDescription className="text-[#333333]/80 text-sm">
+          Select a CSV file containing your transaction data
+        </DialogDescription>
+      </DialogHeader>
+
+      <div
+        className="w-full border-2 border-dashed border-[#14A0C4]/30 rounded-xl text-center transition-all duration-200 hover:border-[#14A0C4]"
+        style={{ padding: "32px", backgroundColor: "#F9FCFD" }} // very light blue-white opalite shade
+      >
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept=".csv"
+          className="hidden"
+        />
+
+        <Button
+          size="lg"
+          className="bg-[#14A0C4] hover:bg-[#1190B2] text-white font-medium rounded-lg px-6 py-3 shadow-sm transition-colors"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={isLoading}
+        >
+          <FileUp className="w-5 h-5 mr-2" />
+          Select File
+        </Button>
+
+        {fileInputRef.current?.files?.[0] ? (
+          <p className="mt-4 text-sm text-[#333333]/70">
+            Selected: {fileInputRef.current?.files?.[0].name}
+          </p>
+        ) : (
+          <p className="text-xs text-[#333333]/60 mt-3">
+            Maximum file size: 5MB
+          </p>
+        )}
+
+        {isLoading && (
+          <div className="mt-4 space-y-2">
+            <Progress value={progress} className="h-2" />
+            <p className="text-xs text-[#333333]/70">
+              Parsing file... {progress}%
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FileUploadStep;
