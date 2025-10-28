@@ -35,15 +35,9 @@ app.use(
 
 app.get("/" , asyncHandler(async( req: Request , res: Response, next:
 NextFunction) =>{
-    //try{
-    throw new BadRequestException("This is a Test error");
     res.status(HTTPSTATUS.OK).json({
      message:"Welcome to the API",
     });
-    //catch(error)
-    //{
-       // next(error);
-    //}
 }));
 
 app.use(`${BASE_PATH}/auth`, authRoutes);
@@ -60,5 +54,3 @@ app.listen(Env.PORT ,async ()=>
 
     console.log(`Server is running on port ${Env.PORT} in ${Env.NODE_ENV} mode`);
 })
-
-
