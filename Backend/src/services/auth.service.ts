@@ -11,6 +11,13 @@ import ReportSettingModel, {
 import { calulateNextReportDate } from "../utils/helper";
 import { signJwtToken } from "../utils/jwt";
 
+// Explicit type for login service return (with expiresAt possibly undefined)
+type LoginServiceReturn = {
+  user: ReturnType<typeof UserModel.prototype.omitPassword>;
+  accessToken: string;
+  expiresAt: number | Date | undefined;
+  reportSetting: any;
+};
 
 export const registerService = async (body: RegisterSchemaType) => {
   const { email } = body;
@@ -46,10 +53,7 @@ export const registerService = async (body: RegisterSchemaType) => {
   }
 };
 
-
-
-
-export const loginService = async (body: LoginSchemaType) => {
+export const loginService = async (body: LoginSchemaType): Promise<LoginServiceReturn> => {
   const { email, password } = body;
   const user = await UserModel.findOne({ email });
   if (!user) throw new NotFoundException("Email/password not found");
