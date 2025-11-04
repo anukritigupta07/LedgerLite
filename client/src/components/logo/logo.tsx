@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { PROTECTED_ROUTES } from "../../routes/common/routePath";
-import logo from "../../assets/Logo.png"; // ✅ Import image from src/assets
 
 const Logo = (props: { url?: string }) => {
   return (
@@ -10,7 +9,7 @@ const Logo = (props: { url?: string }) => {
     >
       {/* Logo Image */}
       <img
-        src={logo} // ✅ use imported logo variable
+        src="/Logo.png" // ✅ served directly from public/
         alt="LedgerLite Logo"
         className="h-10 w-10 object-contain transition-transform duration-200 group-hover:scale-105"
       />
