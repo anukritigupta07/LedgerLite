@@ -39,31 +39,6 @@ It helps users and service providers **manage their work, transactions, and dail
 3. Add your environment variables under **Settings → Environment**.
 4. Deploy — you’ll get a live API URL (e.g., `https://ledgerlite-backend.onrender.com`).
 
-### 🔹 Deploy Frontend on Render or Vercel
-
-1. Push your frontend repo.
-2. Add your `.env` variable:
-
-   ```
-   VITE_API_URL=https://ledgerlite-backend.onrender.com
-   ```
-3. Build and deploy.
-
----
-
-
----
-
-## 📊 Screenshots (optional)
-
-You can add screenshots here later, for example:
-
-| Dashboard                               | Transactions                                  | Reports                             |
-| --------------------------------------- | --------------------------------------------- | ----------------------------------- |
-| ![Dashboard](screenshots/dashboard.png) | ![Transactions](screenshots/transactions.png) | ![Reports](screenshots/reports.png) |
-
----
-
 ## 🧠 Future Improvements
 
 * 💬 Add AI-powered financial insights
@@ -77,10 +52,8 @@ You can add screenshots here later, for example:
 
 **Anukriti Gupta**
 Frontend + Backend Developer
-🔗 [Portfolio](https://portfolio-djoj.vercel.app)
-📧 [anukritigupta@example.com](mailto:anukritigupta@example.com)
+🔗 [Portfolio](https://anukritigupta-portfolio.vercel.app/#)
+📧 [anukritigupta@example.com](mailto:guptaanukriti7@gmail.com)
 
----
 
-Would you like me to make a **shorter “GitHub-friendly” version** (for display on your repo front page), or keep this **detailed developer README** version?
 
