@@ -21,7 +21,7 @@ const app = express();
 const BASE_PATH = Env.BASE_PATH;
 app.use(express.json());
 app.use(express.urlencoded({extended : true}));
-
+app.use(express.static('dist'));
 app.use(passport.initialize())
 
 
