@@ -25,25 +25,6 @@ Version Control	GitHub
 
 
 
-Then run:
-
-npm install
-npm run dev
-
-💻 Frontend (/client or /frontend)
-
-Create a .env file:
-
-VITE_API_URL=https://ledgerlite-backend.onrender.com
-
-
-Then run:
-
-npm install
-npm run dev
-
-🏗️ Deployment Guide
-🔹 Deploy Backend on Render
-
 Push your backend code to GitHub.
+
 
