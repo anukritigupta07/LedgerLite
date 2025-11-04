@@ -53,7 +53,8 @@ It helps users and service providers **manage their work, transactions, and dail
 **Anukriti Gupta**
 Frontend + Backend Developer
 🔗 [Portfolio](https://anukritigupta-portfolio.vercel.app/#)
-📧 [anukritigupta@example.com](mailto:guptaanukriti7@gmail.com)
+
+
 
 
 
